@@ -7,7 +7,7 @@ app.controller('loginCtrl', function($scope, $state, $localStorage, UserService)
     UserService.login(user)
     .then(function(res){
       $scope.$storage.myToken = res.data.token;
-      $state.go('home');
+      $state.go('books.index');
     }, function(err) {
       console.error(err);
 

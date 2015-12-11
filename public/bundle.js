@@ -34,7 +34,7 @@ app.controller('loginCtrl', function($scope, $state, $localStorage, UserService)
     UserService.login(user)
     .then(function(res){
       $scope.$storage.myToken = res.data.token;
-      $state.go('home');
+      $state.go('books.index');
     }, function(err) {
       console.error(err);
 
@@ -49,7 +49,7 @@ var app = angular.module('paymentApp');
 app.controller('navCtrl', function($scope, $state) {
   $scope.logout = function(){
     delete $scope.$storage.myToken;
-    $state.go('home');
+    $state.go('login');
   };
 });
 

@@ -25,6 +25,9 @@ html(lang='en')
               a(ui-sref='login')#loginLink Login
             li(ng-show="$storage.myToken")
               a#logout(ng-click='logout()') Logout
+            li(ng-show="$storage.myToken")
+              a#logout(ui-sref='cart') My Cart
+                i.fa.fa-shopping-cart
     .container
       ui-view
     
