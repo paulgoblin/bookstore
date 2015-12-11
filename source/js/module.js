@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('paymentApp', ['ui.router', 'ngStorage']);
+var app = angular.module('paymentApp', ['ui.router', 'ngStorage', "stripe.checkout"]);
 
 app.constant('ENV', {
   API_URL: 'http://localhost:3000'
@@ -8,6 +8,8 @@ app.constant('ENV', {
 
 app.run(function($rootScope, $localStorage) {
   $rootScope.$storage = $localStorage;
+  $rootScope.$storage.myCart = $rootScope.$storage.myCart || {};
+
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {

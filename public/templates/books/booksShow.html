@@ -1,4 +1,9 @@
 <div>
+  <div ng-show='numInCart > 0' class='alert alert-success'>
+    Currently {{numInCart}} of this book in your cart
+  </div>
+  <div ng-show='numInCart == 0' class='alert' />
+
   <h2>
     {{book.title}}
   </h2>
@@ -8,5 +13,26 @@
   <h4>
     Price {{book.price | currency}}
   </h4>
+  <span class='cartCount' ng-show='numInCart > 0'>{{numInCart}}</span>
+  <button ng-click='addToCart()' class="btn btn-default">
+    Add to cart
+    <i class="fa fa-shopping-cart"></i>
+  </button>
+  <button ng-click='clearItemFromCart()' class="btn btn-default">
+    Clear Cart
+    <i class="fa fa-times"></i>
+  </button>
+  <br>
+  <br>
   <button ui-sref='books.index' class="btn btn-default">Back to Books</button>
+
+
+  <!-- <button stripe-checkout="doCheckout"
+          data-key="pk_test_iP0ohizMNiBa6YjLRfNJbFHH"
+          data-name={{book.title}}
+          data-description={{book.author}}
+          data-amount={{book.price*100}}>
+    Buy
+  </button> -->
+
 </div>
