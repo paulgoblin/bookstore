@@ -3,7 +3,7 @@
 var app = angular.module('paymentApp', ['ui.router', 'ngStorage', "stripe.checkout"]);
 
 app.constant('ENV', {
-  API_URL: 'http://localhost:3000'
+  API_URL: 'https://protected-harbor-9567.herokuapp.com'
 });
 
 app.run(function($rootScope, $localStorage) {
@@ -27,43 +27,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('books', { url: '/books', templateUrl: 'templates/books/layout.html', abstract: true })
     .state('books.index', { url: '/', templateUrl: 'templates/books/booksIndex.html', controller: 'booksIndexCtrl'})
     .state('books.show', { url: '/{bookId}', templateUrl: 'templates/books/booksShow.html', controller: 'booksShowCtrl'})
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('BookService', function($http, ENV) {
-  this.index = function() {
-    return $http.get(`${ENV.API_URL}/books/`);
-  };
-  this.show = function(bookId) {
-    return $http.get(`${ENV.API_URL}/books/${bookId}`);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('Payment', function($http, ENV) {
-  this.sendPayment = function(data) {
-    console.log(data,'data in payment srvc');
-    return $http.post(`${ENV.API_URL}/payment`, data);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('UserService', function($http, ENV) {
-  this.register = function(user) {
-    return $http.post(`${ENV.API_URL}/users/register`, user);
-  };
-  this.login = function(user) {
-    return $http.post(`${ENV.API_URL}/users/login`, user);
-  };
 });
 
 'use strict';
@@ -114,6 +77,43 @@ app.controller('registerCtrl', function($scope, $state, UserService) {
       console.error(err);
     });
   }
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('BookService', function($http, ENV) {
+  this.index = function() {
+    return $http.get(`${ENV.API_URL}/books/`);
+  };
+  this.show = function(bookId) {
+    return $http.get(`${ENV.API_URL}/books/${bookId}`);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('Payment', function($http, ENV) {
+  this.sendPayment = function(data) {
+    console.log(data,'data in payment srvc');
+    return $http.post(`${ENV.API_URL}/payment`, data);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('UserService', function($http, ENV) {
+  this.register = function(user) {
+    return $http.post(`${ENV.API_URL}/users/register`, user);
+  };
+  this.login = function(user) {
+    return $http.post(`${ENV.API_URL}/users/login`, user);
+  };
 });
 
 'use strict';
