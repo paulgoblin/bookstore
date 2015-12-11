@@ -5,6 +5,7 @@ html(lang='en')
     link(href='/vendor/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
     link(href='/vendor/sweetalert/dist/sweetalert.css', rel='stylesheet')
     link(href='/vendor/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href="/css/style.css", rel="stylesheet")
   body(ng-app='paymentApp')
     nav.navbsar.navbar-default(ng-controller='navCtrl')
       .container-fluid
@@ -26,7 +27,7 @@ html(lang='en')
             li(ng-show="$storage.myToken")
               a#logout(ng-click='logout()') Logout
             li(ng-show="$storage.myToken")
-              a#logout(ui-sref='cart') My Cart
+              a#logout(ui-sref='cart.index') My Cart
                 i.fa.fa-shopping-cart
     .container
       ui-view

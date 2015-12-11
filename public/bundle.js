@@ -20,9 +20,49 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('login', { url: '/login', templateUrl: 'templates/login.html', controller: 'loginCtrl'})
     .state('register', { url: '/register', templateUrl: 'templates/register.html', controller: 'registerCtrl'})
 
+    .state('cart', { url: '/cart', templateUrl: 'templates/cart/layout.html', abstract: true})
+    .state('cart.index', { url: '/', templateUrl: 'templates/cart/cartIndex.html', controller: 'cartIndexCtrl'})
+    .state('cart.reciept', { url: '/{purchaseId}', templateUrl: 'templates/cart/cartReciept.html', controller: 'cartRecieptCtrl'})
+
     .state('books', { url: '/books', templateUrl: 'templates/books/layout.html', abstract: true })
     .state('books.index', { url: '/', templateUrl: 'templates/books/booksIndex.html', controller: 'booksIndexCtrl'})
     .state('books.show', { url: '/{bookId}', templateUrl: 'templates/books/booksShow.html', controller: 'booksShowCtrl'})
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('BookService', function($http, ENV) {
+  this.index = function() {
+    return $http.get(`${ENV.API_URL}/books/`);
+  };
+  this.show = function(bookId) {
+    return $http.get(`${ENV.API_URL}/books/${bookId}`);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('Payment', function($http, ENV) {
+  this.sendPayment = function(data) {
+    return $http.post(`${ENV.API_URL}/payment`, data);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('UserService', function($http, ENV) {
+  this.register = function(user) {
+    return $http.post(`${ENV.API_URL}/users/register`, user);
+  };
+  this.login = function(user) {
+    return $http.post(`${ENV.API_URL}/users/login`, user);
+  };
 });
 
 'use strict';
@@ -79,42 +119,6 @@ app.controller('registerCtrl', function($scope, $state, UserService) {
 
 var app = angular.module('paymentApp');
 
-app.service('BookService', function($http, ENV) {
-  this.index = function() {
-    return $http.get(`${ENV.API_URL}/books/`);
-  };
-  this.show = function(bookId) {
-    return $http.get(`${ENV.API_URL}/books/${bookId}`);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('Payment', function($http, ENV) {
-  this.sendPayment = function(data) {
-    return $http.post(`${ENV.API_URL}/payment`, data);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('UserService', function($http, ENV) {
-  this.register = function(user) {
-    return $http.post(`${ENV.API_URL}/users/register`, user);
-  };
-  this.login = function(user) {
-    return $http.post(`${ENV.API_URL}/users/login`, user);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
 app.controller('booksIndexCtrl', function($scope, $state, BookService) {
   BookService.index()
   .then(function(res) {
@@ -161,3 +165,27 @@ app.controller('booksShowCtrl', function($scope, $state, BookService, Payment, E
   }
 
 });
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.controller('cartIndexCtrl', function($scope, $state, BookService) {
+  $scope.test = 'poop';
+  $scope.cart = [];
+  var itemKeys = Object.keys($scope.$storage.myCart);
+  var count = 0;
+  $scope.total = 0;
+  itemKeys.forEach((key) => {
+    BookService.show(key).then((resp)=>{
+      let cartItem = {};
+      cartItem.qty = $scope.$storage.myCart[key];
+      cartItem.total = resp.data.price*cartItem.qty;
+      cartItem.price = resp.data.price;
+      cartItem.title = resp.data.title;
+      $scope.cart.push(cartItem)
+      $scope.total += cartItem.total
+    })
+  })
+});
+

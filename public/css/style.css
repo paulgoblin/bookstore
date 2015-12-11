@@ -1,1 +1,16 @@
 
+div {
+  border: 10px dashed honeydew
+}
+
+.cartTotal {
+  text-align: right;
+}
+
+.totalPrice {
+  font-weight: bold;
+}
+
+.cashRegisterImg {
+  height: 20px;
+}
