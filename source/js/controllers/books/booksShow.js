@@ -26,9 +26,8 @@ app.controller('booksShowCtrl', function($scope, $state, BookService, Payment, E
   }
 
   $scope.clearItemFromCart = () => {
-    $scope.$storage.myCart[$scope.book._id] = 0;
-    $scope.numInCart = $scope.$storage.myCart[$scope.book._id]
-    
+    delete $scope.$storage.myCart[$scope.book._id];
+    $scope.numInCart = 0;
   }
 
   $scope.showAddButon = () => {

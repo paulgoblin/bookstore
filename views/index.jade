@@ -19,11 +19,11 @@ html(lang='en')
           ul.nav.navbar-nav.navbar-right
             li
               a(ui-sref='books.index')#booksLink Books
-            li
+            li(ng-hide="$storage.myToken")
               a(ui-sref='register')#registerLink Register
-            li
+            li(ng-hide="$storage.myToken")
               a(ui-sref='login')#loginLink Login
-            li
+            li(ng-show="$storage.myToken")
               a#logout(ng-click='logout()') Logout
     .container
       ui-view

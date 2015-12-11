@@ -29,42 +29,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 var app = angular.module('paymentApp');
 
-app.service('BookService', function($http, ENV) {
-  this.index = function() {
-    return $http.get(`${ENV.API_URL}/books/`);
-  };
-  this.show = function(bookId) {
-    return $http.get(`${ENV.API_URL}/books/${bookId}`);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('Payment', function($http, ENV) {
-  this.sendPayment = function(data) {
-    return $http.post(`${ENV.API_URL}/payment`, data);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('UserService', function($http, ENV) {
-  this.register = function(user) {
-    return $http.post(`${ENV.API_URL}/users/register`, user);
-  };
-  this.login = function(user) {
-    return $http.post(`${ENV.API_URL}/users/login`, user);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
 app.controller('loginCtrl', function($scope, $state, $localStorage, UserService) {
   $scope.submit = function(user) {
     UserService.login(user)
@@ -115,6 +79,42 @@ app.controller('registerCtrl', function($scope, $state, UserService) {
 
 var app = angular.module('paymentApp');
 
+app.service('BookService', function($http, ENV) {
+  this.index = function() {
+    return $http.get(`${ENV.API_URL}/books/`);
+  };
+  this.show = function(bookId) {
+    return $http.get(`${ENV.API_URL}/books/${bookId}`);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('Payment', function($http, ENV) {
+  this.sendPayment = function(data) {
+    return $http.post(`${ENV.API_URL}/payment`, data);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('UserService', function($http, ENV) {
+  this.register = function(user) {
+    return $http.post(`${ENV.API_URL}/users/register`, user);
+  };
+  this.login = function(user) {
+    return $http.post(`${ENV.API_URL}/users/login`, user);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
 app.controller('booksIndexCtrl', function($scope, $state, BookService) {
   BookService.index()
   .then(function(res) {
@@ -153,9 +153,8 @@ app.controller('booksShowCtrl', function($scope, $state, BookService, Payment, E
   }
 
   $scope.clearItemFromCart = () => {
-    $scope.$storage.myCart[$scope.book._id] = 0;
-    $scope.numInCart = $scope.$storage.myCart[$scope.book._id]
-    
+    delete $scope.$storage.myCart[$scope.book._id];
+    $scope.numInCart = 0;
   }
 
   $scope.showAddButon = () => {

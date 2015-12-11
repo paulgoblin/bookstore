@@ -13,13 +13,13 @@
   <h4>
     Price {{book.price | currency}}
   </h4>
-  <span class='cartCount' ng-show='numInCart > 0'>{{numInCart}}</span>
+  <!-- <span class='cartCount' ng-show='numInCart > 0'>{{numInCart}}</span> -->
   <button ng-click='addToCart()' class="btn btn-default">
     Add to cart
     <i class="fa fa-shopping-cart"></i>
   </button>
-  <button ng-click='clearItemFromCart()' class="btn btn-default">
-    Clear Cart
+  <button ng-click='clearItemFromCart()' class="btn btn-default" ng-show='numInCart > 0'>
+    Clear Items
     <i class="fa fa-times"></i>
   </button>
   <br>
