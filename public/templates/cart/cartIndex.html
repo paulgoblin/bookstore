@@ -19,7 +19,7 @@
   </tbody>
 </table>
 <div class="cartTotal">
-  <span class="totalPrice">Total: {{total}}</span>
+  <span class="totalPrice">Total: {{total | currency}}</span>
   <button class="btn btn-default" stripe-checkout="doCheckout"
           data-key="pk_test_iP0ohizMNiBa6YjLRfNJbFHH"
           data-name="Total book order"

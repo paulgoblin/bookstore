@@ -22,11 +22,48 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     .state('cart', { url: '/cart', templateUrl: 'templates/cart/layout.html', abstract: true})
     .state('cart.index', { url: '/', templateUrl: 'templates/cart/cartIndex.html', controller: 'cartIndexCtrl'})
-    .state('cart.reciept', { url: '/{purchaseId}', templateUrl: 'templates/cart/cartReciept.html', controller: 'cartRecieptCtrl'})
+    .state('cart.reciept', { url: '/reciept', templateUrl: 'templates/cart/cartReceipt.html', controller: 'cartRecieptCtrl'})
 
     .state('books', { url: '/books', templateUrl: 'templates/books/layout.html', abstract: true })
     .state('books.index', { url: '/', templateUrl: 'templates/books/booksIndex.html', controller: 'booksIndexCtrl'})
     .state('books.show', { url: '/{bookId}', templateUrl: 'templates/books/booksShow.html', controller: 'booksShowCtrl'})
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('BookService', function($http, ENV) {
+  this.index = function() {
+    return $http.get(`${ENV.API_URL}/books/`);
+  };
+  this.show = function(bookId) {
+    return $http.get(`${ENV.API_URL}/books/${bookId}`);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('Payment', function($http, ENV) {
+  this.sendPayment = function(data) {
+    console.log(data,'data in payment srvc');
+    return $http.post(`${ENV.API_URL}/payment`, data);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('UserService', function($http, ENV) {
+  this.register = function(user) {
+    return $http.post(`${ENV.API_URL}/users/register`, user);
+  };
+  this.login = function(user) {
+    return $http.post(`${ENV.API_URL}/users/login`, user);
+  };
 });
 
 'use strict';
@@ -77,43 +114,6 @@ app.controller('registerCtrl', function($scope, $state, UserService) {
       console.error(err);
     });
   }
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('BookService', function($http, ENV) {
-  this.index = function() {
-    return $http.get(`${ENV.API_URL}/books/`);
-  };
-  this.show = function(bookId) {
-    return $http.get(`${ENV.API_URL}/books/${bookId}`);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('Payment', function($http, ENV) {
-  this.sendPayment = function(data) {
-    console.log(data,'data in payment srvc');
-    return $http.post(`${ENV.API_URL}/payment`, data);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('UserService', function($http, ENV) {
-  this.register = function(user) {
-    return $http.post(`${ENV.API_URL}/users/register`, user);
-  };
-  this.login = function(user) {
-    return $http.post(`${ENV.API_URL}/users/login`, user);
-  };
 });
 
 'use strict';
@@ -197,8 +197,24 @@ app.controller('cartIndexCtrl', function($scope, $state, BookService, Payment ) 
     data.cart.unshift($scope.total);
     Payment.sendPayment(data).then((resp) => {
       console.log('got this back from server',resp);
+      if (resp.status != 200) return;
+      $scope.$storage.reciept = resp.data;
+      $scope.$storage.reciept.push(new Date());
+      delete $scope.$storage.myCart
+      let purchaseId = Date.now().toString()
+      $state.go('cart.reciept')
     })
   }
 
 });
 
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.controller('cartRecieptCtrl', function($scope, $state ) {
+  $scope.date = $scope.$storage.reciept.pop();
+  $scope.reciept = $scope.$storage.reciept.slice(1);
+  $scope.total = $scope.$storage.reciept[0];
+  console.log($scope.date,'date');
+});

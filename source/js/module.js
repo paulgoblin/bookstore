@@ -22,7 +22,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     .state('cart', { url: '/cart', templateUrl: 'templates/cart/layout.html', abstract: true})
     .state('cart.index', { url: '/', templateUrl: 'templates/cart/cartIndex.html', controller: 'cartIndexCtrl'})
-    .state('cart.reciept', { url: '/{purchaseId}', templateUrl: 'templates/cart/cartReciept.html', controller: 'cartRecieptCtrl'})
+    .state('cart.reciept', { url: '/reciept', templateUrl: 'templates/cart/cartReceipt.html', controller: 'cartRecieptCtrl'})
 
     .state('books', { url: '/books', templateUrl: 'templates/books/layout.html', abstract: true })
     .state('books.index', { url: '/', templateUrl: 'templates/books/booksIndex.html', controller: 'booksIndexCtrl'})

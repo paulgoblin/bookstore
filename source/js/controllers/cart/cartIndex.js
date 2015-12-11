@@ -28,6 +28,12 @@ app.controller('cartIndexCtrl', function($scope, $state, BookService, Payment ) 
     data.cart.unshift($scope.total);
     Payment.sendPayment(data).then((resp) => {
       console.log('got this back from server',resp);
+      if (resp.status != 200) return;
+      $scope.$storage.reciept = resp.data;
+      $scope.$storage.reciept.push(new Date());
+      delete $scope.$storage.myCart
+      let purchaseId = Date.now().toString()
+      $state.go('cart.reciept')
     })
   }
 

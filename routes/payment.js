@@ -16,11 +16,11 @@ router.post('/', function(req, res) {
     description: "Example charge"
   }, function(err, charge) {
     if (err && err.type === 'StripeCardError') {
-      // The card has been declined
+      return res.send("Payment error", err)
     }
   });
 
-  res.send('ok')
+  res.send(cart)
 
 });
 

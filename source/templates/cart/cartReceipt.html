@@ -1,20 +1,26 @@
-<h1>Books Index</h1>
+<h1>Success!</h1>
+<h4>Here's your reciept:</h4>
 
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Author</th>
+      <th>Book</th>
       <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat='book in books track by $index'
-        ui-sref='books.show({bookId: book._id})'>
-
-      <td>{{book.title}}</td>
-      <td>{{book.author}}</td>
-      <td>{{book.price | currency}}</td>
+    <tr ng-repeat='item in reciept track by $index'
+        ui-sref='books.show({bookId: item._id})'>
+      <td>{{item.title}}</td>
+      <td>{{item.price | currency}}</td>
+      <td>{{item.qty}}</td>
+      <td>{{item.total | currency}}</td>
     </tr>
   </tbody>
 </table>
+<span>Date: {{date}}</span>
+<div class="cartTotal">
+  <span class="totalPrice">Total: {{total | currency}}</span>
+</div>
