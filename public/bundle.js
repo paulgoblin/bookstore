@@ -33,42 +33,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 var app = angular.module('paymentApp');
 
-app.service('BookService', function($http, ENV) {
-  this.index = function() {
-    return $http.get(`${ENV.API_URL}/books/`);
-  };
-  this.show = function(bookId) {
-    return $http.get(`${ENV.API_URL}/books/${bookId}`);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('Payment', function($http, ENV) {
-  this.sendPayment = function(data) {
-    return $http.post(`${ENV.API_URL}/payment`, data);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
-app.service('UserService', function($http, ENV) {
-  this.register = function(user) {
-    return $http.post(`${ENV.API_URL}/users/register`, user);
-  };
-  this.login = function(user) {
-    return $http.post(`${ENV.API_URL}/users/login`, user);
-  };
-});
-
-'use strict';
-
-var app = angular.module('paymentApp');
-
 app.controller('loginCtrl', function($scope, $state, $localStorage, UserService) {
   $scope.submit = function(user) {
     UserService.login(user)
@@ -113,6 +77,43 @@ app.controller('registerCtrl', function($scope, $state, UserService) {
       console.error(err);
     });
   }
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('BookService', function($http, ENV) {
+  this.index = function() {
+    return $http.get(`${ENV.API_URL}/books/`);
+  };
+  this.show = function(bookId) {
+    return $http.get(`${ENV.API_URL}/books/${bookId}`);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('Payment', function($http, ENV) {
+  this.sendPayment = function(data) {
+    console.log(data,'data in payment srvc');
+    return $http.post(`${ENV.API_URL}/payment`, data);
+  };
+});
+
+'use strict';
+
+var app = angular.module('paymentApp');
+
+app.service('UserService', function($http, ENV) {
+  this.register = function(user) {
+    return $http.post(`${ENV.API_URL}/users/register`, user);
+  };
+  this.login = function(user) {
+    return $http.post(`${ENV.API_URL}/users/login`, user);
+  };
 });
 
 'use strict';
@@ -170,8 +171,8 @@ app.controller('booksShowCtrl', function($scope, $state, BookService, Payment, E
 
 var app = angular.module('paymentApp');
 
-app.controller('cartIndexCtrl', function($scope, $state, BookService) {
-  $scope.test = 'poop';
+app.controller('cartIndexCtrl', function($scope, $state, BookService, Payment ) {
+  $scope.test = 500
   $scope.cart = [];
   var itemKeys = Object.keys($scope.$storage.myCart);
   var count = 0;
@@ -183,9 +184,21 @@ app.controller('cartIndexCtrl', function($scope, $state, BookService) {
       cartItem.total = resp.data.price*cartItem.qty;
       cartItem.price = resp.data.price;
       cartItem.title = resp.data.title;
+      cartItem._id = resp.data._id
       $scope.cart.push(cartItem)
       $scope.total += cartItem.total
     })
   })
+
+  $scope.doCheckout = (tokenObj) => {
+    let data = {};
+    data.tokenObj = tokenObj;
+    data.cart = $scope.cart;
+    data.cart.unshift($scope.total);
+    Payment.sendPayment(data).then((resp) => {
+      console.log('got this back from server',resp);
+    })
+  }
+
 });
 

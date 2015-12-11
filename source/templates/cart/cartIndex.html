@@ -20,8 +20,12 @@
 </table>
 <div class="cartTotal">
   <span class="totalPrice">Total: {{total}}</span>
-  <button class="btn btn-default">
-    Checkout
-    <img class="cashRegisterImg" src="https://cloud.githubusercontent.com/assets/7620920/3008458/9b90fd22-debd-11e3-818c-1f086479aa8a.png" alt="">
+  <button class="btn btn-default" stripe-checkout="doCheckout"
+          data-key="pk_test_iP0ohizMNiBa6YjLRfNJbFHH"
+          data-name="Total book order"
+          data-description=''
+          data-amount={{total*100}}>
+          Checkout
+          <img class="cashRegisterImg" src="https://cloud.githubusercontent.com/assets/7620920/3008458/9b90fd22-debd-11e3-818c-1f086479aa8a.png" alt="">
   </button>
 </div>
